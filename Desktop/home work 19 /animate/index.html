@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>canvas</title>
+</head>
+<body>
+    <script src="three.js"></script>
+    <script src="OrbitControls.js"></script>
+    <script>
+        //console.log(THREE);
+        const scene = new THREE.Scene();
+        const fov = 70;
+        const aspectRatio = window.innerWidth/window.innerHeight;
+        const near = 0.1;
+        const far = 1000;
+        const camera = new THREE.PerspectiveCamera(fov, aspectRatio, near, far);
+
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight)
+        renderer.setClearColor('#ccc');
+        console.log(renderer.domElement);
+
+        document.body.prepend(renderer.domElement);
+        // CILINDER!!!!!-----------------------------------
+        const controls = new THREE.OrbitControls(camera,renderer.domElement);
+        const geometry = new THREE.CylinderBufferGeometry(11, 15, 10, 5);
+        //console.log(geometry);
+        
+        const material = new THREE.MeshBasicMaterial({color:'skyblue'});
+
+        const cilinder = new THREE.Mesh(geometry,material);
+        cilinder.scale.set(10,10,10,10)
+        console.log(cilinder);
+        //---------------------------------------------------------
+        scene.add(cilinder);
+        // что то странное с камерой пришлось ее отдалить на занятии
+        // z = 25 ,мне пришлось ставить 250 иначе цилиндр появляется за камерой
+        camera.position.z = 250;
+        const light = new THREE.DirectionalLight('#fff',0.5);
+        light.position.set(-1, 2,4 );//x y z чтоб ыне передавать через точкку;
+        scene.add(light);
+
+        function animate () {
+            requestAnimationFrame(animate);
+            renderer.render(scene,camera);
+            cilinder.rotation.x += 0.01;
+            cilinder.rotation.y += 0.01;
+            controls.update();
+
+        }
+        animate();        
+    </script>
+</body>
+</html>
